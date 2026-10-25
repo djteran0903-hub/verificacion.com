@@ -1,14 +1,9 @@
-
-
 <!doctype html>
 <html lang="es">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="theme-color" content="#090909" />
-  
-  <meta name="google-site-verification" content="_GgGL1-lZi5cT_OEc8WbOuLmA104xTHD_yBL550CY-0" />
-  
   <title>67 — Acceso</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -101,7 +96,93 @@
       mask-image: linear-gradient(to bottom, black, transparent 88%);
     }
 
+    /* Carita minimalista y cute: ojos suaves, sin círculo exterior. */
+    .face {
+      position: absolute;
+      z-index: 0;
+      top: clamp(26px, 7vh, 72px);
+      right: clamp(20px, 8vw, 12vw);
+      width: clamp(70px, 9vw, 112px);
+      aspect-ratio: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 18%;
+      pointer-events: none;
+    }
+
+    .face-eye {
+      position: relative;
+      width: 28%;
+      aspect-ratio: 1.08;
+      overflow: hidden;
+      border: 2px solid rgba(255, 168, 181, .82);
+      border-radius: 50%;
+      background: linear-gradient(145deg, #ffffff 10%, #fff4f5 100%);
+      box-shadow: 0 0 13px rgba(255,255,255,.34), 0 0 14px rgba(255,117,140,.2);
+      transform-origin: center;
+      transition: transform 90ms ease;
+    }
+
+    .face-pupil {
+      --pupil-x: 0px;
+      --pupil-y: 0px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 52%;
+      aspect-ratio: 1;
+      border: 1px solid rgba(255,255,255,.7);
+      border-radius: 50%;
+      background: radial-gradient(circle at 35% 28%, #ffffff 0 14%, #45414a 17% 67%, #211f25 100%);
+      box-shadow: 0 1px 5px rgba(45,30,36,.38);
+      transform: translate(calc(-50% + var(--pupil-x)), calc(-50% + var(--pupil-y)));
+      transition: transform 65ms linear;
+    }
+
+    .face-pupil::after {
+      content: "";
+      position: absolute;
+      right: 13%;
+      bottom: 16%;
+      width: 19%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #ff9cae;
+      box-shadow: 0 0 4px rgba(255,156,174,.5);
+    }
+
+    .face::before,
+    .face::after {
+      content: "";
+      position: absolute;
+      top: 63%;
+      width: 14%;
+      aspect-ratio: 1.5;
+      border-radius: 50%;
+      background: rgba(255, 126, 148, .32);
+      filter: blur(.5px);
+    }
+
+    .face::before { left: 8%; }
+    .face::after { right: 8%; }
+
+    /* Una sonrisa feliz pequeña y suave. */
+    .face-mouth {
+      position: absolute;
+      bottom: 20%;
+      width: 27%;
+      height: 9%;
+      border-bottom: 2px solid #ff8aa0;
+      border-radius: 0 0 80% 80%;
+      box-shadow: 0 3px 7px rgba(255,138,160,.16);
+    }
+
+    .face.blink .face-eye { transform: scaleY(.08); }
+
     .panel {
+      position: relative;
+      z-index: 1;
       width: min(100%, 530px);
       animation: enter .5s ease both;
     }
@@ -125,11 +206,51 @@
 
     .brand-number { display: inline-block; }
 
-    /* El apóstrofo queda cercano al 7, con una separación mínima controlada. */
+    /* Ojos que aparecen brevemente sobre el 67 para el saludo. */
+    .brand-eyes {
+      position: absolute;
+      z-index: 3;
+      top: 30%;
+      left: 18%;
+      width: 45%;
+      display: flex;
+      justify-content: space-between;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(-2px) scale(.65);
+      animation: brand-eyes-greeting 8s ease-in-out infinite;
+    }
+
+    .brand-eye {
+      position: relative;
+      width: 17%;
+      aspect-ratio: .84;
+      border: 1px solid rgba(255,255,255,.76);
+      border-radius: 50%;
+      background: #fff;
+      box-shadow: 0 0 8px rgba(255,255,255,.45), 0 0 8px rgba(224,24,34,.4);
+      overflow: hidden;
+    }
+
+    .brand-eye::after {
+      content: "";
+      position: absolute;
+      top: 30%;
+      left: 31%;
+      width: 42%;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      background: #242126;
+      box-shadow: inset 2px 2px 0 rgba(255,255,255,.32);
+    }
+
+    /* El apóstrofo queda cercano al 7 y hace un saludo cada 8 segundos. */
     .brand-apostrophe {
       display: inline-block;
       margin-left: .055em;
       letter-spacing: 0;
+      transform-origin: 12% 82%;
+      animation: apostrophe-wave 8s ease-in-out infinite;
     }
 
     /* Cortes negros sobre el número, para dar el efecto solicitado */
@@ -454,6 +575,20 @@
       }
     }
 
+    @keyframes brand-eyes-greeting {
+      0%, 5%, 18%, 100% { opacity: 0; transform: translateY(-2px) scale(.65); }
+      7%, 16% { opacity: 1; transform: translateY(0) scale(1); }
+      11% { opacity: 1; transform: translateY(1px) scale(1.04); }
+    }
+
+    @keyframes apostrophe-wave {
+      0%, 5%, 18%, 100% { transform: rotate(0deg) translateY(0); }
+      7% { transform: rotate(-23deg) translateY(-.04em); }
+      10% { transform: rotate(20deg) translateY(-.06em); }
+      13% { transform: rotate(-17deg) translateY(-.04em); }
+      16% { transform: rotate(13deg) translateY(-.02em); }
+    }
+
     /* Reduce los elementos cuando la ventana es baja, por ejemplo en móvil horizontal. */
     @media (max-height: 700px) {
       .app { padding-top: 18px; padding-bottom: 18px; }
@@ -540,6 +675,15 @@
       86% { transform: rotate(-7deg) translateX(-1px); }
     }
 
+    @media (max-width: 700px) {
+      .face {
+        top: 18px;
+        right: 18px;
+        width: 58px;
+        opacity: .82;
+      }
+    }
+
     @media (max-width: 390px) {
       .app { padding: 22px 16px; }
       .form-card { padding: 25px 21px; box-shadow: 9px 12px 0 rgba(115,0,10,.35); }
@@ -551,6 +695,55 @@
       .brand { margin-left: 3px; }
     }
 
+    /* Refinamiento visual: menos ruido, más aire y componentes suaves. */
+    .noise { opacity: .1; }
+
+    .form-card {
+      padding: clamp(27px, 6vw, 42px);
+      border-color: rgba(255,255,255,.1);
+      border-top-color: rgba(224,24,34,.62);
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(21,21,21,.88), rgba(7,7,7,.82));
+      box-shadow: 0 22px 58px rgba(0,0,0,.38), 0 1px 0 rgba(255,255,255,.04) inset;
+      backdrop-filter: blur(12px);
+    }
+
+    .form-card::before {
+      height: 4px;
+      box-shadow: 0 0 12px rgba(224, 24, 34, .52);
+    }
+
+    .step-label { color: #ff5962; letter-spacing: .16em; }
+    h1 { font-weight: 700; }
+    .instruction { max-width: 37ch; color: #b7b7b7; }
+
+    input {
+      min-height: 54px;
+      border-color: rgba(255,255,255,.2);
+      border-radius: 10px;
+      background: rgba(0,0,0,.5);
+    }
+
+    input:focus { box-shadow: 0 0 0 3px rgba(224,24,34,.13); }
+
+    button {
+      min-height: 53px;
+      border-radius: 10px;
+      background: #63df8d;
+      letter-spacing: .09em;
+    }
+
+    .copy-button {
+      min-height: 54px;
+      border-radius: 10px;
+      background: rgba(224,24,34,.1);
+    }
+
+    .url-box { border-color: rgba(255,255,255,.2); border-radius: 10px; background: rgba(0,0,0,.5); }
+    .open-link { border-radius: 10px; background: #63df8d; }
+    .link-rule { border-color: rgba(255,255,255,.09); }
+    .device-note { color: #747474; }
+
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
     }
@@ -559,9 +752,14 @@
 <body>
   <main class="app">
     <div class="noise" aria-hidden="true"></div>
+    <div class="face" id="face" aria-hidden="true">
+      <span class="face-eye"><span class="face-pupil"></span></span>
+      <span class="face-eye"><span class="face-pupil"></span></span>
+      <span class="face-mouth"></span>
+    </div>
 
     <section class="panel" aria-label="Acceso al juego">
-      <div class="brand" aria-label="67 apóstrofo"><span class="brand-number">67</span><span class="brand-apostrophe">'</span></div>
+      <div class="brand" aria-label="67 apóstrofo"><span class="brand-number">67</span><span class="brand-eyes" aria-hidden="true"><span class="brand-eye"></span><span class="brand-eye"></span></span><span class="brand-apostrophe">'</span></div>
 
       <div class="form-card step-1">
         <section class="screen active" id="game-screen" aria-labelledby="game-title">
@@ -639,6 +837,48 @@
       deviceNote.textContent = isMobile
         ? 'Dispositivo detectado: Móvil'
         : 'Dispositivo detectado: PC';
+
+      // Los ojos siguen suavemente el puntero y parpadean cada 5 segundos.
+      const face = document.getElementById('face');
+      const eyes = [...face.querySelectorAll('.face-eye')];
+      const pupils = [...face.querySelectorAll('.face-pupil')];
+      let nextPointer = null;
+      let eyeFrame = null;
+
+      function moveEyes() {
+        eyeFrame = null;
+        if (!nextPointer) return;
+        const { x, y } = nextPointer;
+        eyes.forEach((eye, index) => {
+          const bounds = eye.getBoundingClientRect();
+          const deltaX = x - (bounds.left + bounds.width / 2);
+          const deltaY = y - (bounds.top + bounds.height / 2);
+          const distance = Math.hypot(deltaX, deltaY) || 1;
+          const maximumMove = Math.max(2, bounds.width * .2);
+          const amount = Math.min(maximumMove, distance / 18);
+          pupils[index].style.setProperty('--pupil-x', `${(deltaX / distance) * amount}px`);
+          pupils[index].style.setProperty('--pupil-y', `${(deltaY / distance) * amount}px`);
+        });
+      }
+
+      window.addEventListener('pointermove', event => {
+        if (event.pointerType === 'touch') return;
+        nextPointer = { x: event.clientX, y: event.clientY };
+        if (!eyeFrame) eyeFrame = requestAnimationFrame(moveEyes);
+      }, { passive: true });
+
+      window.addEventListener('mouseout', event => {
+        if (event.relatedTarget) return;
+        pupils.forEach(pupil => {
+          pupil.style.setProperty('--pupil-x', '0px');
+          pupil.style.setProperty('--pupil-y', '0px');
+        });
+      });
+
+      setInterval(() => {
+        face.classList.add('blink');
+        setTimeout(() => face.classList.remove('blink'), 170);
+      }, 5000);
 
       function showScreen(screenToShow) {
         [gameScreen, levelScreen, whatsappScreen].forEach(screen => screen.classList.remove('active'));
